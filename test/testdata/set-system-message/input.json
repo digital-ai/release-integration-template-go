@@ -1,0 +1,22 @@
+{
+  "release": {
+    "id": "release-id",
+    "automatedTaskAsUser": {
+      "username": "admin",
+      "password": "admin"
+    },
+    "url": "localhost:5516"
+  },
+  "task": {
+    "type": "goContainerExamples.SetSystemMessage",
+    "properties": [
+      {
+        "name": "message",
+        "value": "welcome user",
+        "kind": "STRING",
+        "category": "input",
+        "password": false
+      }
+    ]
+  }
+}

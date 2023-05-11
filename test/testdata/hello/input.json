@@ -1,0 +1,14 @@
+{
+  "task": {
+    "type": "goContainerExamples.Hello",
+    "properties": [
+      {
+        "name": "yourName",
+        "value": "John Doe",
+        "kind": "STRING",
+        "category": "input",
+        "password": false
+      }
+    ]
+  }
+}

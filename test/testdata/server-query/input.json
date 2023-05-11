@@ -1,0 +1,14 @@
+{
+  "task": {
+    "type": "goContainerExamples.ServerQuery",
+    "properties": [
+      {
+        "name": "productId",
+        "value": "1",
+        "kind": "STRING",
+        "category": "input",
+        "password": false
+      }
+    ]
+  }
+}
