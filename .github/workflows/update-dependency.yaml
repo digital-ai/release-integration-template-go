@@ -1,0 +1,37 @@
+name: Update dependency dispatch
+on:
+  repository_dispatch:
+    types: [ update-repo-dependency ]
+jobs:
+  update-dependency:
+    runs-on: ubuntu-latest
+    env:
+      GOPRIVATE: github.com/digital-ai/release-integration-sdk-go
+      GH_ACCESS_TOKEN: ${{ secrets.XL_CI_GITHUB_ACTIONS_TOKEN }}
+      GH_USER_NAME: ${{ github.actor }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: "0"
+
+      - name: Get version of release-integration-sdk-go
+        run: echo ${{ github.event.client_payload.ref }}
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+      - run: git config --global url.https://$GH_USER_NAME:$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+      - run: go build
+
+      - name: Install package with the new version
+        run: |
+          go get -t -u github.com/digital-ai/release-integration-sdk-go@${{ github.event.client_payload.ref }}
+          go mod tidy
+
+      - name: Git commit
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Upgrade version of release-integration-sdk-go to ${{ github.event.client_payload.ref }}"
+          add_options: "-u go.mod go.sum"

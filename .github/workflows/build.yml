@@ -1,0 +1,49 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+      - release/*
+  pull_request:
+
+jobs:
+  build:
+    name: Build Plugin
+    runs-on: ubuntu-latest
+    env:
+      GOPRIVATE: github.com/digital-ai/release-integration-sdk-go
+      GH_ACCESS_TOKEN: ${{ secrets.XL_CI_GITHUB_ACTIONS_TOKEN }}
+      GH_USER_NAME: ${{ github.actor }}
+    permissions:
+      packages: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: git config --global url.https://$GH_USER_NAME:$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: Get branch name
+        if: contains(github.event.pull_request.labels.*.name, 'release-integration-sdk-go-build')
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+
+      - name: Get development package of release-integration-sdk-go
+        if: contains(github.event.pull_request.labels.*.name, 'release-integration-sdk-go-build')
+        run: |
+          go get -t -u $GOPRIVATE@${{ steps. branch-name. outputs. current_branch }}
+          go mod tidy
+
+      - name: Build Project
+        run: |
+          go mod download
+          go build
+
+      - name: Run Tests
+        run: |
+          go test -cover -v ./...
