@@ -41,3 +41,5 @@ tmp/
 *.ipr
 *.iws
 *.log
+
+/release-integration-template-go
