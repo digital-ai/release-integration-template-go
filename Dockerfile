@@ -13,16 +13,16 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -ldflags "-s -w" -o /release-deploy-integration
+RUN go build -ldflags "-s -w" -o /release-integration-template-go
 
 #Step 2 - UPX Compression
 FROM alpine:3.17 AS compress
 
 RUN apk add upx
 
-COPY --from=build /release-deploy-integration /
+COPY --from=build /release-integration-template-go /
 
-RUN upx /release-deploy-integration
+RUN upx /release-integration-template-go
 
 #Step 3
 FROM gcr.io/distroless/static-debian11
@@ -30,6 +30,6 @@ FROM gcr.io/distroless/static-debian11
 ENV INPUT_LOCATION=/input
 ENV OUTPUT_LOCATION=/output
 
-COPY --from=compress release-deploy-integration /
+COPY --from=compress release-integration-template-go /
 
-ENTRYPOINT ["/release-deploy-integration"]
+ENTRYPOINT ["/release-integration-template-go"]
