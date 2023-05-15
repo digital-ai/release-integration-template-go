@@ -46,7 +46,10 @@ func prepareCommandFactory(input task.InputContext) (command.CommandFactory, err
 		Url: input.Release.Url,
 	}
 
-	releaseClient := release.NewReleaseApiClient(ctx)
+	releaseClient, err := release.NewReleaseApiClient(ctx)
+	if err != nil {
+		return nil, err
+	}
 
 	return cmd.NewCommandFactory(httpClient, releaseClient), nil
 

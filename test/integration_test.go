@@ -32,7 +32,11 @@ var commandRunner = runner.NewCommandRunner(
 				},
 			),
 		)
-		releaseClient := release.NewReleaseApiClient(input.Release) //todo define a mock release client
+
+		releaseClient, err := release.NewReleaseApiClient(input.Release) //todo define a mock release client
+		if err != nil {
+			return nil, err
+		}
 
 		return cmd.NewCommandFactory(&httpClient, releaseClient), nil
 	},
