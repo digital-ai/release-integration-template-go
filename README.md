@@ -88,7 +88,7 @@ Then:
 
 ### 5. Test it!
 
-Create a template with the task **Container Example: Hello** and run it!
+Create a template with the task **Go Container Example: Hello** and run it!
 
 ### 6. Clean up
 
