@@ -1,7 +1,7 @@
 name: Update dependency dispatch
 on:
   repository_dispatch:
-    types: [ update-repo-dependency ]
+    types: [update-repo-dependency]
 jobs:
   update-dependency:
     runs-on: ubuntu-latest
@@ -23,12 +23,12 @@ jobs:
         with:
           go-version: 1.19
       - run: git config --global url.https://$GH_USER_NAME:$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
-      - run: go build
 
       - name: Install package with the new version
         run: |
           go get -t -u github.com/digital-ai/release-integration-sdk-go@${{ github.event.client_payload.ref }}
           go mod tidy
+          go build
 
       - name: Git commit
         uses: stefanzweifel/git-auto-commit-action@v4
