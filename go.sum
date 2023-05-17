@@ -6,12 +6,8 @@ github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ3
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/digital-ai/release-integration-sdk-go v0.0.0-20230511133303-a120a668ea09 h1:5/fFSax6CutFoBcMxduHcOQ9p88tcRTloa1E2hMM51U=
-github.com/digital-ai/release-integration-sdk-go v0.0.0-20230511133303-a120a668ea09/go.mod h1:byUVHcwZbEbbxDN0gny5xLJM80aNVPe14HL/BN60OsY=
-github.com/digital-ai/release-integration-sdk-go v0.2.28-0.20230515084539-087095ceb9a3 h1:UhuLtOqkmOQs46LxZceE6nV29jHCLP3rvdIV7l8Qeao=
-github.com/digital-ai/release-integration-sdk-go v0.2.28-0.20230515084539-087095ceb9a3/go.mod h1:byUVHcwZbEbbxDN0gny5xLJM80aNVPe14HL/BN60OsY=
-github.com/digital-ai/release-integration-sdk-go v0.2.28-0.20230515093148-0068c469e82e h1:FAdMR+l5yFIeltGuSbOx/UxtCT8kPLJLsfjP7C+D6FI=
-github.com/digital-ai/release-integration-sdk-go v0.2.28-0.20230515093148-0068c469e82e/go.mod h1:byUVHcwZbEbbxDN0gny5xLJM80aNVPe14HL/BN60OsY=
+github.com/digital-ai/release-integration-sdk-go v0.2.28 h1:RbiMI5mBZu8N7ABT4JYx84oY2Raco0n/JZr5wKAL0Tk=
+github.com/digital-ai/release-integration-sdk-go v0.2.28/go.mod h1:byUVHcwZbEbbxDN0gny5xLJM80aNVPe14HL/BN60OsY=
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
 github.com/emicklei/go-restful/v3 v3.9.0 h1:XwGDlfxEnQZzuopoqxwSEllNcCOM9DhhFyhFIIGKwxE=
 github.com/emicklei/go-restful/v3 v3.9.0/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
