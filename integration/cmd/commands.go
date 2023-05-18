@@ -5,11 +5,6 @@ import (
 	"github.com/digital-ai/release-integration-sdk-go/http"
 )
 
-type GetCiTags struct {
-	client   *http.HttpClient
-	DeployCi string `json:"deployCI"`
-}
-
 type Hello struct {
 	YourName string `json:"yourName"`
 }
