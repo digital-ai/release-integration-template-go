@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/digital-ai/release-integration-sdk-go/api/release"
 	"github.com/digital-ai/release-integration-sdk-go/http"
 	"github.com/digital-ai/release-integration-sdk-go/runner"
@@ -17,9 +16,6 @@ var PluginVersion = "development"
 var BuildDate = "now"
 
 func prepareCommandFactory(input task.InputContext) (command.CommandFactory, error) {
-	inputJson, _ := json.Marshal(input)
-	task.Comment(string(inputJson))
-
 	var httpClient *http.HttpClient
 
 	// If there is no server as an input property, return empty http httpClient
