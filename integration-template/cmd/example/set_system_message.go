@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/digital-ai/release-integration-sdk-go/api/release/openapi"
 	"github.com/digital-ai/release-integration-sdk-go/task"
-	"github.com/digital-ai/release-integration-template-go/integration"
+	"github.com/digital-ai/release-integration-template-go/integration-template"
 	"net/http"
 )
 
@@ -25,7 +25,7 @@ func SetSystemMessage(releaseClient *openapi.APIClient, message string) (*task.R
 	}
 
 	// Return message in the output of the task
-	return task.NewResult().String(integration.DefaultResponseResultField, "System message updated"), nil
+	return task.NewResult().String(integration_template.DefaultResponseResultField, "System message updated"), nil
 }
 
 var UpdateSystemMessage = func(releaseClient *openapi.APIClient, systemMessage openapi.SystemMessageSettings) (*openapi.SystemMessageSettings, *http.Response, error) {
