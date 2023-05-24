@@ -106,6 +106,10 @@ On the main page of this repository, click **Use this template** button, and sel
 
 **Naming conventions**
 
+- `integration-template` folder (as well as the package `integration_template`) should be renamed after the integration target name. 
+All task logic should be implemented inside this folder.
+
+
 Use the following naming convention for developing Digital.ai Release integration plugins:
 
     [publisher]-release-[target]-integration
