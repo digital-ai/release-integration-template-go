@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/digital-ai/release-integration-sdk-go/api/release/openapi"
 	"github.com/digital-ai/release-integration-sdk-go/task"
-	"github.com/digital-ai/release-integration-template-go/integration"
-	"github.com/digital-ai/release-integration-template-go/integration/cmd/test"
+	"github.com/digital-ai/release-integration-template-go/integration-template"
+	"github.com/digital-ai/release-integration-template-go/integration-template/cmd/test"
 	"net/http"
 	"testing"
 )
@@ -23,7 +23,7 @@ func TestSetSystemMessage(t *testing.T) {
 		{
 			client:  &openapi.APIClient{},
 			message: "Welcome user!",
-			output:  task.NewResult().String(integration.DefaultResponseResultField, "System message updated"),
+			output:  task.NewResult().String(integration_template.DefaultResponseResultField, "System message updated"),
 			response: func(releaseClient *openapi.APIClient, systemMessage openapi.SystemMessageSettings) (*openapi.SystemMessageSettings, *http.Response, error) {
 				return &systemMessage, nil, nil
 			},

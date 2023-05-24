@@ -8,7 +8,7 @@ import (
 	"github.com/digital-ai/release-integration-sdk-go/task"
 	"github.com/digital-ai/release-integration-sdk-go/task/command"
 	"github.com/digital-ai/release-integration-sdk-go/task/property"
-	"github.com/digital-ai/release-integration-template-go/integration/cmd"
+	"github.com/digital-ai/release-integration-template-go/integration-template/cmd"
 	"github.com/digital-ai/release-integration-template-go/task/server"
 )
 

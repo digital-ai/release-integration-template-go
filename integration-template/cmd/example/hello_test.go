@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/digital-ai/release-integration-sdk-go/task"
-	"github.com/digital-ai/release-integration-template-go/integration/cmd/test"
+	"github.com/digital-ai/release-integration-template-go/integration-template/cmd/test"
 	"testing"
 )
 

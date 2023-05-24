@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/digital-ai/release-integration-sdk-go/task"
-	"github.com/digital-ai/release-integration-template-go/integration/cmd/example"
+	"github.com/digital-ai/release-integration-template-go/integration-template/cmd/example"
 )
 
 func (command *Hello) FetchResult() (*task.Result, error) {
