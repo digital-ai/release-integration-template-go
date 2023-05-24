@@ -107,7 +107,8 @@ On the main page of this repository, click **Use this template** button, and sel
 **Naming conventions**
 
 - `integration-template` folder (as well as the package `integration_template`) should be renamed after the integration target name. 
-All task logic should be implemented inside this folder.
+All task logic should be implemented inside this folder.\
+(**Note:** *Go doesn't encurage usage of `-` and `_` in package names, try to keep package name short, single word, but still clear. In this example `-` was used on intention with intention for you to refactor it.*)
 
 
 Use the following naming convention for developing Digital.ai Release integration plugins:
