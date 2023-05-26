@@ -79,7 +79,7 @@ build_jar(){
 
 build_image(){
   # Build docker image and push to registry
-  if docker build --build-arg GITHUB_PAT="$GITHUB_PAT" --tag "$REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION" .; then
+  if docker build --tag "$REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION" .; then
     if docker image push "$REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION"; then
       echo "Build and push completed: $REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION"
     else

@@ -90,7 +90,7 @@ goto :eof
 
 :build_image
 :: Build docker image and push to registry
-    call docker build --build-arg GITHUB_PAT="%GITHUB_PAT%" --tag "%REGISTRY_URL%/%REGISTRY_ORG%/%PLUGIN%:%VERSION%" .
+    call docker build --tag "%REGISTRY_URL%/%REGISTRY_ORG%/%PLUGIN%:%VERSION%" .
     if errorlevel 1 (
       echo Build failed for %REGISTRY_URL%/%REGISTRY_ORG%/%PLUGIN%:%VERSION%
       goto :eof

@@ -53,15 +53,10 @@ Add the following entry to `C:\Windows\System32\drivers\etc\hosts` (Run as admin
 
 ### Build & publish the plugin
 
-Run the build script
+Build will generate a jar and a docker image pushed to the registry defined in `project.properties`
 
-1. Create GitHub private access token with configured SSO
-2. Set GitHub private access token as an environment variable
-
-```shell
-export GITHUB_PAT=${YOUR_GITHUB_PRIVATE_ACCESS_TOKEN}
-```
-3. Run build script
+1. Set properties in `project.properties`
+2. Run build script to build the plugin jar and publish the image to registry:
 
 **Unix / macOS**
 

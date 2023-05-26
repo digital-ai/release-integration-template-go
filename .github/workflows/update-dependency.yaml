@@ -5,10 +5,6 @@ on:
 jobs:
   update-dependency:
     runs-on: ubuntu-latest
-    env:
-      GOPRIVATE: github.com/digital-ai/release-integration-sdk-go
-      GH_ACCESS_TOKEN: ${{ secrets.XL_CI_GITHUB_ACTIONS_TOKEN }}
-      GH_USER_NAME: ${{ github.actor }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -22,7 +18,6 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.19
-      - run: git config --global url.https://$GH_USER_NAME:$GH_ACCESS_TOKEN@github.com/.insteadOf https://github.com/
 
       - name: Install package with the new version
         run: |
