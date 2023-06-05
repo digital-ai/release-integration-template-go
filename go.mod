@@ -3,7 +3,7 @@ module github.com/digital-ai/release-integration-template-go
 go 1.19
 
 require (
-	github.com/digital-ai/release-integration-sdk-go v0.2.28
+	github.com/digital-ai/release-integration-sdk-go v0.2.29
 	k8s.io/klog/v2 v2.90.1
 )
 
