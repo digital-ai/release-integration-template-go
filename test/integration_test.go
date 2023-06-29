@@ -7,7 +7,7 @@ import (
 	"github.com/digital-ai/release-integration-sdk-go/task"
 	"github.com/digital-ai/release-integration-sdk-go/task/command"
 	"github.com/digital-ai/release-integration-sdk-go/test"
-	"github.com/digital-ai/release-integration-template-go/integration-template/cmd"
+	"github.com/digital-ai/release-integration-template-go/my-integration/cmd"
 	"testing"
 )
 

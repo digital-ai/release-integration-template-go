@@ -24,10 +24,10 @@ types:
 
 
   # Simple example task.
-  # The Python SDK will look for a corresponding Python class called 'Hello'
   goContainerExamples.Hello:
     extends: goContainerExamples.BaseTask
-    description: "Simple greeter task"
+    label: "Container Examples: Hello (Go)"
+    description: Simple greeter task
 
     input-properties:
       yourName:
@@ -43,6 +43,7 @@ types:
   # Example task that interacts with the Release API
   goContainerExamples.SetSystemMessage:
     extends: goContainerExamples.BaseTask
+    label: "Container Examples: Set System Message (Go)"
     description: Simple API task
 
     input-properties:
@@ -54,6 +55,7 @@ types:
   # Example task that interacts with a third-aprty server
   goContainerExamples.ServerQuery:
     extends: goContainerExamples.BaseTask
+    label: "Container Examples: Server Query (Go)"
     description: Simple API task
 
     input-properties:

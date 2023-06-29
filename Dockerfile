@@ -25,9 +25,6 @@ RUN upx /release-integration-template-go
 #Step 3
 FROM gcr.io/distroless/static-debian11
 
-ENV INPUT_LOCATION=/input
-ENV OUTPUT_LOCATION=/output
-
 COPY --from=compress release-integration-template-go /
 
 ENTRYPOINT ["/release-integration-template-go"]
