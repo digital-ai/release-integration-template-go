@@ -5,8 +5,7 @@ import (
 	"fmt"
 	"github.com/digital-ai/release-integration-sdk-go/api/release/openapi"
 	"github.com/digital-ai/release-integration-sdk-go/task"
-	"github.com/digital-ai/release-integration-template-go/integration-template"
-	"github.com/digital-ai/release-integration-template-go/integration-template/cmd/test"
+	"github.com/digital-ai/release-integration-sdk-go/test"
 	"net/http"
 	"testing"
 )
@@ -23,7 +22,7 @@ func TestSetSystemMessage(t *testing.T) {
 		{
 			client:  &openapi.APIClient{},
 			message: "Welcome user!",
-			output:  task.NewResult().String(integration_template.DefaultResponseResultField, "System message updated"),
+			output:  task.NewResult(),
 			response: func(releaseClient *openapi.APIClient, systemMessage openapi.SystemMessageSettings) (*openapi.SystemMessageSettings, *http.Response, error) {
 				return &systemMessage, nil, nil
 			},
@@ -40,11 +39,11 @@ func TestSetSystemMessage(t *testing.T) {
 		},
 	}
 
-	for _, ts := range tests {
-		t.Run(fmt.Sprintf("SetSystemMessage [message = %s]", ts.message), func(t *testing.T) {
-			UpdateSystemMessage = ts.response
-			result, err := SetSystemMessage(ts.client, ts.message)
-			test.AssertRequestResult(t, result, err, ts.output, ts.err)
+	for _, testCase := range tests {
+		t.Run(fmt.Sprintf("SetSystemMessage [message = %s]", testCase.message), func(t *testing.T) {
+			UpdateSystemMessage = testCase.response
+			result, err := SetSystemMessage(testCase.client, testCase.message)
+			test.AssertRequestResult(t, result, err, testCase.output, testCase.err)
 		})
 	}
 }

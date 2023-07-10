@@ -7,6 +7,7 @@ import (
 	"github.com/digital-ai/release-integration-sdk-go/task"
 )
 
+// ServerQuery Fetches product details from a remote server
 func ServerQuery(httpClient *http.HttpClient, productId string) (*task.Result, error) {
 	response, err := GetProducts(httpClient, productId)
 	if err != nil {

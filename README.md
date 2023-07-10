@@ -101,9 +101,9 @@ On the main page of this repository, click **Use this template** button, and sel
 
 **Naming conventions**
 
-- `integration-template` folder (as well as the package `integration_template`) should be renamed after the integration target name. 
+- `my-integration` folder (as well as the package `my_integration`) should be renamed after the integration target name. 
 All task logic should be implemented inside this folder.\
-(**Note:** *Go doesn't encurage usage of `-` and `_` in package names, try to keep package name short, single word, but still clear. In this example `-` was used on intention with intention for you to refactor it.*)
+(**Note:** *Go doesn't encourage usage of `-` and `_` in package names, try to keep package name short, single word, but still clear. In this example `-` was used on intention with intention for you to refactor it.*)
 
 
 Use the following naming convention for developing Digital.ai Release integration plugins:
@@ -130,5 +130,24 @@ Change the following line in `project.properties`:
 PLUGIN=acme-release-example-integration
 ...
 ```
+### Add a new task
 
+1. Add task type to `type-definitions.yaml`.
+2. Add task struct with input parameters to `cmd/commands.go`.
+3. Add task type to constants and command factory in `cmd/factory.go`.
+4. Add `FetchResult()` implementation of command in `cmd/executors.go` and add task logic.
 
+**_NOTE:_** Although task logic is inside `FetchResult()` method, it is a good practice to create a new file for each new task (See examples).
+
+### Integration tests
+
+Integration tests execution is implemented in `test/integration_test.go` using Convey. 
+
+#### Add a new integration test:
+1. Create a new folder inside `test/testdata`.
+2. Add `input.json` (provided input) and `expected.json` (expected output) files inside the new folder.
+3. Add the folder name to `testsLabels` variable in `test/integration_test.go`.
+
+#### Add a new mock HTTP response:
+1. Add JSON file with corresponding response to `test/fixtures`.
+2. Add `test.MockResult{}` to `commandRunner` in `test/integration_test.go`.

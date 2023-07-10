@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/digital-ai/release-integration-sdk-go/http"
 	"github.com/digital-ai/release-integration-sdk-go/task"
-	"github.com/digital-ai/release-integration-template-go/integration-template/cmd/test"
+	"github.com/digital-ai/release-integration-sdk-go/test"
 	"os"
 	"testing"
 )
@@ -39,11 +39,11 @@ func TestServerQuery(t *testing.T) {
 		},
 	}
 
-	for _, ts := range tests {
-		t.Run(fmt.Sprintf("ServerQuery [message = %s]", ts.productId), func(t *testing.T) {
-			GetProducts = ts.response
-			result, err := ServerQuery(ts.client, ts.productId)
-			test.AssertRequestResult(t, result, err, ts.output, ts.err)
+	for _, testCase := range tests {
+		t.Run(fmt.Sprintf("ServerQuery [message = %s]", testCase.productId), func(t *testing.T) {
+			GetProducts = testCase.response
+			result, err := ServerQuery(testCase.client, testCase.productId)
+			test.AssertRequestResult(t, result, err, testCase.output, testCase.err)
 		})
 	}
 }
