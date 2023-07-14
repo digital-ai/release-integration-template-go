@@ -53,10 +53,10 @@ Add the following entry to `C:\Windows\System32\drivers\etc\hosts` (Run as admin
 
 ### Build & publish the plugin
 
-Build will generate a jar and a docker image pushed to the registry defined in `project.properties`
+Build will generate a zip and a docker image pushed to the registry defined in `project.properties`
 
 1. Set properties in `project.properties`
-2. Run build script to build the plugin jar and publish the image to registry:
+2. Run build script to build the plugin zip and publish the image to registry:
 
 **Unix / macOS**
 
@@ -70,12 +70,12 @@ sh build.sh
 build.bat 
 ```
 
-This builds the jar and the container image and pushes the image to the configured registry.
+This builds the zip and the container image and pushes the image to the configured registry.
 
 ### Install plugin into Release
 
-In the Release UI, use the Plugin Manager interface to upload the jar from `build`.
-The jar takes the name of the project, for example `release-integration-template-go-0.0.1.jar`.
+In the Release UI, use the Plugin Manager interface to upload the zip from `build`.
+The zip takes the name of the project, for example `release-integration-template-go-0.0.1.zip`.
 
 Then:
 * Restart Release container and wait for it to come up
