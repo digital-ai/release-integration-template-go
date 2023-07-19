@@ -47,4 +47,7 @@ var commandHatchery = map[command.CommandType]func(*CommandFactory) command.Comm
 			httpClient: factory.httpClient,
 		}
 	},
+	command.AbortCommand(hello): func(factory *CommandFactory) command.CommandExecutor {
+		return &AbortHello{}
+	},
 }
