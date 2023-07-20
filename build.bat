@@ -1,22 +1,22 @@
 @echo off
-:: This script is used to build a jar and/or a docker image of a plugin.
+:: This script is used to build a zip and/or a docker image of a plugin.
 :: The script takes in one optional argument:
-:: --jar: build only the jar file
+:: --zip: build only the zip file
 :: --image: build only the docker image
-:: If no argument is passed, both jar and image will be built.
+:: If no argument is passed, both zip and image will be built.
 
-if "%1" == "--jar" (
-    echo Building jar...
+if "%1" == "--zip" (
+    echo Building zip...
     call :read_properties
-    call :build_jar
+    call :build_zip
 ) else if "%1" == "--image" (
     echo Building image...
     call :read_properties
     call :build_image
 ) else (
-    echo Building jar and image...
+    echo Building zip and image...
     call :read_properties
-    call :build_jar
+    call :build_zip
     call :build_image
 )
 goto :eof
@@ -26,7 +26,7 @@ goto :eof
     for /f "tokens=1,2 delims==" %%G in (project.properties) do (set %%G=%%H)
 goto :eof
 
-:build_jar
+:build_zip
     :: Remove the tmp directory and create it again
     rd /S /Q tmp 2>nul
     mkdir tmp 2>nul
@@ -75,14 +75,14 @@ goto :eof
     ))>"tmp\plugin-version.properties.bak"
     move tmp\plugin-version.properties.bak tmp\plugin-version.properties
 
-    :: Create the build directory and remove any previously created jar file
+    :: Create the build directory and remove any previously created zip file
     mkdir build 2>nul
-    del "build\%PLUGIN%-%VERSION%.jar" 2>nul
+    del "build\%PLUGIN%-%VERSION%.zip" 2>nul
 
-    :: Create a jar file from the contents of the tmp directory and place it in the build directory
+    :: Create a zip file from the contents of the tmp directory and place it in the build directory
     powershell Compress-Archive -Path tmp\* -DestinationPath build\%PLUGIN%-%VERSION%.zip
-    move build\%PLUGIN%-%VERSION%.zip build\%PLUGIN%-%VERSION%.jar
-    echo Build completed: %PLUGIN%-%VERSION%.jar
+    move build\%PLUGIN%-%VERSION%.zip build\%PLUGIN%-%VERSION%.zip
+    echo Build completed: %PLUGIN%-%VERSION%.zip
 
     :: Remove the tmp directory
     rd /S /Q tmp
