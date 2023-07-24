@@ -34,9 +34,9 @@ goto :eof
     :: Copy the resources directory contents to tmp
     xcopy /E /I resources tmp
 
-    :: Replace placeholders in synthetic.xml with values from project.properties
-    if exist "tmp\synthetic.xml" (
-        (for /f "delims=" %%i in (tmp\synthetic.xml) do (
+    :: Replace placeholders in type-definitions.xml with values from project.properties
+    if exist "tmp\type-definitions.xml" (
+        (for /f "delims=" %%i in (tmp\type-definitions.xml) do (
             set "line=%%i"
             setlocal enabledelayedexpansion
             set "line=!line:@project.name@=%PLUGIN%!"
@@ -45,8 +45,8 @@ goto :eof
             set "line=!line:@registry.org@=%REGISTRY_ORG%!"
             echo(!line!
             endlocal
-        ))>"tmp\synthetic.xml.bak"
-        move tmp\synthetic.xml.bak tmp\synthetic.xml
+        ))>"tmp\type-definitions.xml.bak"
+        move tmp\type-definitions.xml.bak tmp\type-definitions.xml
     )
 
     :: Replace placeholders in type-definitions.yaml with values from project.properties
