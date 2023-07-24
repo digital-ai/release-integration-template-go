@@ -34,6 +34,10 @@ types:
         description: The name to greet
         kind: string
         default: World
+      sleep:
+        description: Boolean flag to trigger sleep or immediately execute command
+        kind: boolean
+        default: false
 
     output-properties:
       greeting:
