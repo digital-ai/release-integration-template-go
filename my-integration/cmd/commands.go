@@ -21,5 +21,4 @@ type ServerQuery struct {
 }
 
 type AbortHello struct {
-	YourName string `json:"yourName"`
 }
