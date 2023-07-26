@@ -7,7 +7,6 @@ import (
 
 type Hello struct {
 	YourName string `json:"yourName"`
-	Sleep    bool   `json:"sleep"`
 }
 
 type SetSystemMessage struct {

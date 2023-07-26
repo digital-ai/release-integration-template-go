@@ -4,14 +4,9 @@ import (
 	"context"
 	"github.com/digital-ai/release-integration-sdk-go/task"
 	"github.com/digital-ai/release-integration-template-go/my-integration/cmd/example"
-	"time"
 )
 
 func (command *Hello) FetchResult(ctx context.Context) (*task.Result, error) {
-	if command.Sleep {
-		time.Sleep(60 * time.Second)
-	}
-	task.Comment("Hello world sleep stopped")
 	return example.Hello(command.YourName)
 }
 
