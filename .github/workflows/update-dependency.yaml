@@ -30,4 +30,3 @@ jobs:
         with:
           commit_message: "Upgrade version of release-integration-sdk-go to ${{ github.event.client_payload.ref }}"
           add_options: "-u go.mod go.sum"
-          push_options: --force
