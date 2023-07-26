@@ -1,6 +1,7 @@
 package example
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/digital-ai/release-integration-sdk-go/http"
@@ -8,8 +9,8 @@ import (
 )
 
 // ServerQuery Fetches product details from a remote server
-func ServerQuery(httpClient *http.HttpClient, productId string) (*task.Result, error) {
-	response, err := GetProducts(httpClient, productId)
+func ServerQuery(ctx context.Context, httpClient *http.HttpClient, productId string) (*task.Result, error) {
+	response, err := GetProducts(ctx, httpClient, productId)
 	if err != nil {
 		return nil, err
 	}
@@ -27,6 +28,6 @@ func ServerQuery(httpClient *http.HttpClient, productId string) (*task.Result, e
 	return taskResult, nil
 }
 
-var GetProducts = func(httpClient *http.HttpClient, productId string) ([]byte, error) {
-	return httpClient.Get(fmt.Sprintf("products/%s", productId))
+var GetProducts = func(ctx context.Context, httpClient *http.HttpClient, productId string) ([]byte, error) {
+	return httpClient.Get(ctx, fmt.Sprintf("products/%s", productId))
 }

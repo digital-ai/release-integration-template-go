@@ -18,3 +18,6 @@ type ServerQuery struct {
 	httpClient *http.HttpClient
 	ProductId  string `json:"productId"`
 }
+
+type AbortHello struct {
+}
