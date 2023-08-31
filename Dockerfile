@@ -22,8 +22,13 @@ COPY --from=build /release-integration-template-go /
 
 RUN upx /release-integration-template-go
 
-#Step 3
-FROM gcr.io/distroless/static-debian11
+FROM busybox:1.35.0-uclibc as busybox
+
+# Step 2
+FROM gcr.io/distroless/static-debian11:nonroot
+
+COPY --from=busybox /bin/sh /bin/sh
+COPY --from=busybox /bin/kill /bin/kill
 
 COPY --from=compress release-integration-template-go /
 
