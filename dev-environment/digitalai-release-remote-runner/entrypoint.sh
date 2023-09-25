@@ -17,12 +17,23 @@ while true; do
         exit 1
     fi
 
-    response=$(curl -s -X POST -u admin:admin -H "Content-Type: application/json;charset=UTF-8" -d '{"tokenNote": "'$unique_id'"}' $api_url)
+    response=$(curl -s -i -X POST -u admin:admin -H "Content-Type: application/json;charset=UTF-8" -d '{"tokenNote": "'$unique_id'"}' $api_url)
 
-    if [ $? -eq 0 ]; then
+    if [ $? -ne 0 ]; then
+        echo "Fetching token failed - probably still initializing... retrying soon"
+        sleep $WAIT_INTERVAL
+        continue
+    fi
+
+    http_status=$(echo "$response" | awk 'NR==1{print $2}')
+    response_body=$(echo "$response" | sed -n '/^\r\{0,1\}$/,$p')
+    if [ $http_status -ge 200 ] && [ $http_status -lt 300 ]; then
         echo "Successful fetched token..."
-        export RELEASE_RUNNER_TOKEN=$(echo "$response" | jq -r '.token')
+        export RELEASE_RUNNER_TOKEN=$(echo "$response_body" | jq -r '.token')
         break
+    else
+        echo "Fetching token - response had $http_status HTTP status code."
+        echo "Response body was: $response_body"
     fi
 
     echo "Error fetching token! Waiting $WAIT_INTERVAL seconds before trying again..."
