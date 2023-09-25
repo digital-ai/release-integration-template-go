@@ -15,7 +15,7 @@ apiVersion: xl-release/v1
 kind: Users
 spec:
   - username: remote-runner
-    password: r3mote-runn3R
+    password: !value password
     name: Remote Runner
     email: remote@example.com
     enabled: true
