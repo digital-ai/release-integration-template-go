@@ -34,6 +34,8 @@ cd dev-environment
 docker compose up -d --build
 ```
 
+>**Note:** Before running you can change default password fore `remote-runner` user in `dev-environment/digitalai-release-setup/secrets.xlvals` if needed - be sure to set a password with special char, numeric value, upper case letter and long enough, or secure enough to be up to security compliancy in Release.
+
 ### Configure your `hosts` file
 
 The Release server needs to be able to find the container images of the integration you are creating. In order to do so the development setup has its own registry running inside Docker. Add the address of the registry to your local machine's `hosts` file.
