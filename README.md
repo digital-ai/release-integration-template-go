@@ -23,11 +23,11 @@ You need to have the following installed in order to develop Go-based container 
 * Git
 * Docker
 
-### Start Release
+### Start Release and Release Remote Runner
 
-We will run Release within a local Docker environment. In the development setup, the Release server will manage containerized tasks in Docker.
+We will run Release and Release Remote Runner within a local Docker environment. In the development setup, the Release will trigger execution of containerized task on local Docker run Remote Runner.
 
-Start the Release environment with the following command
+Start the Release and Remote Runner environment with the following command
 
 ```commandline
 cd dev-environment
