@@ -1,5 +1,5 @@
 # Step 1
-FROM golang:1.19 AS build
+FROM golang:1.21 AS build
 
 ENV CGO_ENABLED=0
 
@@ -13,7 +13,7 @@ COPY . ./
 
 RUN go build -ldflags "-s -w" -o /release-integration-template-go
 
-#Step 2 - UPX Compression
+# Step 2 - UPX Compression
 FROM alpine:3.17 AS compress
 
 RUN apk add upx
@@ -24,7 +24,7 @@ RUN upx /release-integration-template-go
 
 FROM busybox:1.35.0-uclibc as busybox
 
-# Step 2
+# Step 3
 FROM gcr.io/distroless/static-debian11:nonroot
 
 COPY --from=busybox /bin/sh /bin/sh

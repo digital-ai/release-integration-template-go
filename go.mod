@@ -1,6 +1,6 @@
 module github.com/digital-ai/release-integration-template-go
 
-go 1.19
+go 1.21
 
 require (
 	github.com/digital-ai/release-integration-sdk-go v0.2.38
