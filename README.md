@@ -23,16 +23,18 @@ You need to have the following installed in order to develop Go-based container 
 * Git
 * Docker
 
-### Start Release
+### Start Release and Release Remote Runner
 
-We will run Release within a local Docker environment. In the development setup, the Release server will manage containerized tasks in Docker.
+We will run Release and Release Remote Runner within a local Docker environment. In the development setup, the Release will trigger execution of containerized task on local Docker run Remote Runner.
 
-Start the Release environment with the following command
+Start the Release and Remote Runner environment with the following command
 
 ```commandline
 cd dev-environment
 docker compose up -d --build
 ```
+
+>**Note:** Before running you can change default password fore `remote-runner` user in `dev-environment/digitalai-release-setup/secrets.xlvals` if needed - be sure to set a password with special char, numeric value, upper case letter and long enough, or secure enough to be up to security compliancy in Release.
 
 ### Configure your `hosts` file
 
