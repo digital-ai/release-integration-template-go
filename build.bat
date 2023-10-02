@@ -80,8 +80,9 @@ goto :eof
     del "build\%PLUGIN%-%VERSION%.zip" 2>nul
 
     :: Create a zip file from the contents of the tmp directory and place it in the build directory
-    powershell Compress-Archive -Path tmp\* -DestinationPath build\%PLUGIN%-%VERSION%.zip
-    move build\%PLUGIN%-%VERSION%.zip build\%PLUGIN%-%VERSION%.zip
+    pushd tmp
+    7z a -tzip "..\build\%PLUGIN%-%VERSION%.zip" *
+    popd
     echo Build completed: %PLUGIN%-%VERSION%.zip
 
     :: Remove the tmp directory
