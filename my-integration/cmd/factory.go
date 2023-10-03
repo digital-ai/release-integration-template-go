@@ -13,6 +13,7 @@ const (
 	hello            = "goContainerExamples.Hello"
 	setSystemMessage = "goContainerExamples.SetSystemMessage"
 	serverQuery      = "goContainerExamples.ServerQuery"
+	testConnection   = "goContainerExamples.TestConnection"
 )
 
 type CommandFactory struct {
@@ -49,5 +50,8 @@ var commandHatchery = map[command.CommandType]func(*CommandFactory) command.Comm
 	},
 	command.AbortCommand(hello): func(factory *CommandFactory) command.CommandExecutor {
 		return &AbortHello{}
+	},
+	testConnection: func(factory *CommandFactory) command.CommandExecutor {
+		return &TestConnectionCommand{httpClient: factory.httpClient}
 	},
 }

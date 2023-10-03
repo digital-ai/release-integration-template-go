@@ -21,3 +21,7 @@ type ServerQuery struct {
 
 type AbortHello struct {
 }
+
+type TestConnectionCommand struct {
+	httpClient *http.HttpClient
+}

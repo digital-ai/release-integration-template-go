@@ -22,6 +22,22 @@ types:
       iconLocation: test.png
       taskColor: "#667385"
 
+  # All scripts in this project extend the RemoteScriptExecution.
+  goContainerExamples.BaseScript:
+    extends: xlrelease.RemoteScriptExecution
+    virtual: true
+
+    hidden-properties:
+      image:
+        default: "@registry.url@/@registry.org@/@project.name@:@project.version@"
+        transient: true
+
+    output-properties:
+      commandResponse:
+        kind: map_string_string
+      errorMessage:
+        kind: map_string_string
+
 
   # Simple example task.
   goContainerExamples.Hello:
@@ -83,3 +99,14 @@ types:
         default: https://dummyjson.com
         description: A Dummy JSON server
         required: true
+      testConnectionScript: goContainerExamples.TestConnection
+
+  # Test connection script
+  goContainerExamples.TestConnection:
+    extends: goContainerExamples.BaseScript
+
+    input-properties:
+      server:
+        kind: ci
+        referenced-type: goContainerExamples.Server
+
