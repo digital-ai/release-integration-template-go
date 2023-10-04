@@ -8,8 +8,8 @@ github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ3
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/digital-ai/release-integration-sdk-go v0.2.38 h1:PSeqvSxjQYj7E9RzhrbU6qmjnNiZw27TJ48u9mYIFyA=
-github.com/digital-ai/release-integration-sdk-go v0.2.38/go.mod h1:Sb1GXrQqF/e2YvyJ0TkIYM96mGjfqrdxyMbtqqVOIjw=
+github.com/digital-ai/release-integration-sdk-go v0.2.39 h1:UtD/jlOusDYNfEZ23O9sMwuAZpFOD3n9dfESUDNQErE=
+github.com/digital-ai/release-integration-sdk-go v0.2.39/go.mod h1:Sb1GXrQqF/e2YvyJ0TkIYM96mGjfqrdxyMbtqqVOIjw=
 github.com/docopt/docopt-go v0.0.0-20180111231733-ee0de3bc6815/go.mod h1:WwZ+bS3ebgob9U8Nd0kOddGdZWjyMGR8Wziv+TBNwSE=
 github.com/emicklei/go-restful/v3 v3.9.0 h1:XwGDlfxEnQZzuopoqxwSEllNcCOM9DhhFyhFIIGKwxE=
 github.com/emicklei/go-restful/v3 v3.9.0/go.mod h1:6n3XBCmQQb25CM2LCACGz8ukIrRry+4bhvbpWn3mrbc=
