@@ -15,6 +15,7 @@ var testsLabels = []string{
 	"hello",
 	"server-query",
 	//"set-system-message", //todo after defining mock
+	"connection",
 }
 
 var commandRunner = runner.NewCommandRunner(
@@ -27,6 +28,12 @@ var commandRunner = runner.NewCommandRunner(
 						Method:     "GET",
 						Path:       "/products/1",
 						Filename:   "fixtures/product.json",
+						StatusCode: 200,
+					},
+					{
+						Method:     "GET",
+						Path:       "/",
+						Filename:   "fixtures/void.json",
 						StatusCode: 200,
 					},
 				},

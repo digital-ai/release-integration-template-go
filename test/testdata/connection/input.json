@@ -1,0 +1,6 @@
+{
+  "task": {
+    "type": "goContainerExamples.TestConnection",
+    "properties": []
+  }
+}
