@@ -11,59 +11,54 @@ import (
 )
 
 func TestConnectionTest(t *testing.T) {
-	type args struct {
-		client *http.HttpClient
-	}
 
 	type Tests struct {
 		name        string
-		getFunc     func(ctx context.Context, httpClient *http.HttpClient) ([]byte, error)
-		args        args
+		client      *http.HttpClient
+		getFunc     func(ctx context.Context, httpClient *http.HttpClient) error
 		returnValue *task.Result
 		expectedErr error
 	}
 
-	SuccessResponse := func() *task.Result {
-		resultJson, _ := json.Marshal(map[string]interface{}{"output": "", "success": true})
-		result := task.NewResult().Json(task.DefaultResponseResultField, resultJson)
-		return result
+	Success := func() *task.Result {
+		result, _ := json.Marshal(map[string]interface{}{"output": "", "success": true})
+		return task.NewResult().Json(task.DefaultResponseResultField, result)
 	}
 
-	ErrorResponse := func() *task.Result {
-		resultJson, _ := json.Marshal(map[string]interface{}{"output": "some error", "success": false})
-		result := task.NewResult().Json(task.DefaultResponseResultField, resultJson)
-		return result
+	Error := func() *task.Result {
+		result, _ := json.Marshal(map[string]interface{}{"output": "some error", "success": false})
+		return task.NewResult().Json(task.DefaultResponseResultField, result)
 	}
 
 	tests := []Tests{
 		{
-			name: "test connection success",
-			getFunc: func(ctx context.Context, httpClient *http.HttpClient) ([]byte, error) {
-				return json.Marshal(nil)
+			name:   "test connection success",
+			client: &http.HttpClient{},
+			getFunc: func(ctx context.Context, httpClient *http.HttpClient) error {
+				return nil
 			},
-			args: args{
-				client: &http.HttpClient{},
-			},
-			returnValue: SuccessResponse(),
+			returnValue: Success(),
 			expectedErr: nil,
 		},
 		{
-			name: "test connection fail",
-			getFunc: func(ctx context.Context, httpClient *http.HttpClient) ([]byte, error) {
-				return nil, fmt.Errorf("some error")
+			name:   "test connection fail",
+			client: &http.HttpClient{},
+			getFunc: func(ctx context.Context, httpClient *http.HttpClient) error {
+				return fmt.Errorf("some error")
 			},
-			args: args{
-				client: &http.HttpClient{},
-			},
-			returnValue: ErrorResponse(),
+			returnValue: Error(),
 			expectedErr: nil,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			tester := &ExampleConnectionTester{
+				Ctx:        context.Background(),
+				HttpClient: tt.client,
+			}
 			TestConnectionRequest = tt.getFunc
-			got, err := TestConnection(context.Background(), tt.args.client)
+			got, err := test.TestConnection(tester)
 			test.AssertRequestResult(t, got, err, tt.returnValue, tt.expectedErr)
 		})
 	}

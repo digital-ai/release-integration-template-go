@@ -2,30 +2,23 @@ package connection
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/digital-ai/release-integration-sdk-go/http"
-	"github.com/digital-ai/release-integration-sdk-go/task"
 )
 
-func TestConnection(ctx context.Context, httpClient *http.HttpClient) (*task.Result, error) {
-	var result task.TestConnectionResult
-	result.Success = true
-
-	_, err := TestConnectionRequest(ctx, httpClient)
-	if err != nil {
-		result.Success = false
-		result.Output = err.Error()
-	}
-
-	resultJson, err := json.Marshal(result)
-	if err != nil {
-		result.Success = false
-		result.Output = err.Error()
-	}
-
-	return task.NewResult().Json(task.DefaultResponseResultField, resultJson), nil
+// ExampleConnectionTester is a struct for testing connection to server, containing needed properties.
+// Extends ConnectionTester from SDK. See https://github.com/digital-ai/release-integration-sdk-go/blob/master/test/connection.go
+type ExampleConnectionTester struct {
+	Ctx        context.Context
+	HttpClient *http.HttpClient
 }
 
-var TestConnectionRequest = func(ctx context.Context, httpClient *http.HttpClient) ([]byte, error) {
-	return httpClient.Get(ctx, "")
+// TestConnection implements logic for testing the connection to the server.
+// If there is no error, connection is successful.
+func (tester *ExampleConnectionTester) TestConnection() error {
+	return TestConnectionRequest(tester.Ctx, tester.HttpClient)
+}
+
+var TestConnectionRequest = func(ctx context.Context, httpClient *http.HttpClient) error {
+	_, err := httpClient.Get(ctx, "")
+	return err
 }

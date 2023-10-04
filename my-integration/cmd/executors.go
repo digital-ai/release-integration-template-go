@@ -3,6 +3,7 @@ package cmd
 import (
 	"context"
 	"github.com/digital-ai/release-integration-sdk-go/task"
+	"github.com/digital-ai/release-integration-sdk-go/test"
 	"github.com/digital-ai/release-integration-template-go/my-integration/cmd/connection"
 	"github.com/digital-ai/release-integration-template-go/my-integration/cmd/example"
 )
@@ -24,5 +25,9 @@ func (command *AbortHello) FetchResult(ctx context.Context) (*task.Result, error
 }
 
 func (command *TestConnectionCommand) FetchResult(ctx context.Context) (*task.Result, error) {
-	return connection.TestConnection(ctx, command.httpClient)
+	tester := &connection.ExampleConnectionTester{
+		Ctx:        ctx,
+		HttpClient: command.httpClient,
+	}
+	return test.TestConnection(tester)
 }
