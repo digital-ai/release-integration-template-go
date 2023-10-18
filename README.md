@@ -143,11 +143,11 @@ PLUGIN=acme-release-example-integration
 
 ### Add abort logic for a task
 
-View exampless at [Abort Example](my-integration/cmd/example)
+View examples at [Abort Example](my-integration/cmd/example)
 
-1. Define abort command for a task in `factory.go`. Use following `syntax command.AbortCommand(NAME_OF_EXISTING_COMAND): func...`
-2. In `commands.go`, define a struct that will hold the necessary data for abort execution.
-3. In `executors.go`, define a method on the newly created struct which implements `FetchResults`
+1. Define abort command for a task in `cmd/factory.go`. Use following syntax `command.AbortCommand(NAME_OF_EXISTING_COMAND): func...` (See example for `hello`)
+2. In `cmd/commands.go`, define a struct that will hold the necessary data for abort execution.
+3. In `cmd/executors.go`, define a method on the newly created struct which implements `FetchResults`
 
 **_NOTE:_** Make sure to include context.Context in your methods as it is now required because of changes made to support abort functionality.
 
