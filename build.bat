@@ -3,7 +3,8 @@
 :: The script takes in one optional argument:
 :: --zip: build only the zip file
 :: --image: build only the docker image
-:: If no argument is passed, both zip and image will be built.
+:: --upload: both the zip and image will be built and uploaded zip to the release server
+:: If no argument is passed, both the zip and image will be built
 
 if "%1" == "--zip" (
     echo Building zip...
@@ -13,6 +14,12 @@ if "%1" == "--zip" (
     echo Building image...
     call :read_properties
     call :build_image
+) else if "%1" == "--upload" (
+    echo Building zip, image and uploading zip...
+    call :read_properties
+    call :build_zip
+    call :build_image
+    call :upload_zip
 ) else (
     echo Building zip and image...
     call :read_properties
@@ -100,4 +107,9 @@ goto :eof
     ) || (
       echo Push failed for %REGISTRY_URL%/%REGISTRY_ORG%/%PLUGIN%:%VERSION%
     )
+goto :eof
+
+:upload_zip
+    :: upload the zip to the release server
+    CALL xlw.bat plugin release install --file build\%PLUGIN%-%VERSION%.zip --config .xebialabs\config.yaml
 goto :eof

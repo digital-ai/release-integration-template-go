@@ -3,7 +3,8 @@
 # The script takes in one optional argument:
 # --zip: build only the zip file
 # --image: build only the docker image
-# If no argument is passed, both zip and image will be built.
+# --upload: both the zip and image will be built and uploaded zip to the release server
+# If no argument is passed, both the zip and image will be built
 
 read_properties(){
   # Remove the tmp directory and create it again
@@ -90,6 +91,12 @@ build_image(){
   fi
 }
 
+upload_zip(){
+  # upload the zip to the release server
+  chmod +x ./xlw
+  ./xlw plugin release install --file build/$PLUGIN-$VERSION.zip --config .xebialabs/config.yaml
+}
+
 if [ "$1" = "--zip" ]; then
   echo "Building zip..."
   read_properties
@@ -98,6 +105,12 @@ elif [ "$1" = "--image" ]; then
   echo "Building image..."
   read_properties
   build_image
+elif [ "$1" = "--upload" ]; then
+  echo "Building zip, image and uploading zip..."
+  read_properties
+  build_zip
+  build_image
+  upload_zip
 else
   echo "Building zip and image..."
   read_properties

@@ -1,0 +1,5 @@
+xl-release:
+  authmethod: http
+  username: admin
+  password: admin
+  url: http://localhost:5516
