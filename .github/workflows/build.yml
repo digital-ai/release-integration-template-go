@@ -26,7 +26,7 @@ jobs:
       - name: Get branch name
         if: contains(github.event.pull_request.labels.*.name, 'release-integration-sdk-go-build')
         id: branch-name
-        uses: tj-actions/branch-names@v6
+        uses: tj-actions/branch-names@v7.0.7
 
       - name: Get development package of release-integration-sdk-go
         if: contains(github.event.pull_request.labels.*.name, 'release-integration-sdk-go-build')
