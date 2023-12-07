@@ -93,13 +93,15 @@ types:
   goContainerExamples.Server:
     extends: configuration.BasicAuthHttpConnection
 
+    hidden-properties:
+      testConnectionScript: goContainerExamples.TestConnection
+
     properties:
       # Overrides 'url' property to give it a default value and a new description
       url:
         default: https://dummyjson.com
         description: A Dummy JSON server
         required: true
-      testConnectionScript: goContainerExamples.TestConnection
 
   # Test connection script
   goContainerExamples.TestConnection:
