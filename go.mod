@@ -3,7 +3,7 @@ module github.com/digital-ai/release-integration-template-go
 go 1.21
 
 require (
-	github.com/digital-ai/release-integration-sdk-go v0.2.44
+	github.com/digital-ai/release-integration-sdk-go v0.2.45
 	k8s.io/klog/v2 v2.90.1
 )
 
@@ -31,6 +31,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/savaki/jq v0.0.0-20161209013833-0e6baecebbf8 // indirect
 	github.com/smartystreets/assertions v1.2.0 // indirect
 	github.com/smartystreets/goconvey v1.7.2 // indirect
