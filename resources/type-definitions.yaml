@@ -112,3 +112,42 @@ types:
         kind: ci
         referenced-type: goContainerExamples.Server
 
+  # Example lookup task
+  goContainerExamples.NameLookup:
+    extends: goContainerExamples.BaseScript
+
+    input-properties:
+      _ci:
+        kind: ci
+        referenced-type: goContainerExamples.BaseTask
+        required: true
+      _attributes:
+        kind: map_string_string
+        required: true
+      _parameters:
+        kind: ci
+        referenced-type: udm.Parameters
+        required: true
+
+  # Simple example task which uses lookup
+  goContainerExamples.HelloWithLookup:
+    extends: goContainerExamples.BaseTask
+    label: "Container Examples: Hello with Lookup (Go)"
+    description: Simple greeter task with lookup
+
+    input-properties:
+      yourName:
+        description: The name to greet
+        kind: string
+        default: World
+        input-hint:
+          method-ref: nameLookup
+
+    methods:
+      nameLookup:
+        delegate: remoteScriptLookup
+        script: goContainerExamples.NameLookup
+
+    output-properties:
+      greeting:
+        kind: string

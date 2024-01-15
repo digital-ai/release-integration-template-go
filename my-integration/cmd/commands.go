@@ -25,3 +25,10 @@ type AbortHello struct {
 type TestConnectionCommand struct {
 	httpClient *http.HttpClient
 }
+
+type HelloWithLookup struct {
+	YourName string `json:"yourName"`
+}
+
+type LookupNames struct {
+}
