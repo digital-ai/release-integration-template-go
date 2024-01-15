@@ -31,3 +31,11 @@ func (command *TestConnectionCommand) FetchResult(ctx context.Context) (*task.Re
 	}
 	return test.TestConnection(tester)
 }
+
+func (command *HelloWithLookup) FetchResult(ctx context.Context) (*task.Result, error) {
+	return example.Hello(command.YourName)
+}
+
+func (command *LookupNames) FetchResult(ctx context.Context) (*task.Result, error) {
+	return example.ListNames()
+}

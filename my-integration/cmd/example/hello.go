@@ -20,3 +20,14 @@ func Hello(yourName string) (*task.Result, error) {
 	// Return greeting in the output of the task
 	return task.NewResult().String("greeting", greeting), nil
 }
+
+// ListNames lists names as array of lookup result elements
+func ListNames() (*task.Result, error) {
+	lookupResult := []task.LookupResultElement{
+		{Label: "World", Value: "World"},
+		{Label: "John", Value: "John"},
+		{Label: "Bob", Value: "Bob"},
+		{Label: "Mary", Value: "Mary"},
+	}
+	return task.NewResult().LookupResultElements(task.DefaultResponseResultField, lookupResult), nil
+}

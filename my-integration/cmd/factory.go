@@ -14,6 +14,8 @@ const (
 	setSystemMessage = "goContainerExamples.SetSystemMessage"
 	serverQuery      = "goContainerExamples.ServerQuery"
 	testConnection   = "goContainerExamples.TestConnection"
+	helloWithLookup  = "goContainerExamples.HelloWithLookup"
+	nameLookup       = "goContainerExamples.NameLookup"
 )
 
 type CommandFactory struct {
@@ -54,4 +56,8 @@ var commandHatchery = map[command.CommandType]func(*CommandFactory) command.Comm
 	testConnection: func(factory *CommandFactory) command.CommandExecutor {
 		return &TestConnectionCommand{httpClient: factory.httpClient}
 	},
+	helloWithLookup: func(factory *CommandFactory) command.CommandExecutor {
+		return &HelloWithLookup{}
+	},
+	nameLookup: func(factory *CommandFactory) command.CommandExecutor { return &LookupNames{} },
 }
