@@ -1,0 +1,65 @@
+name: Release
+
+on:
+  release:
+    types: [ released ]
+
+jobs:
+  build:
+    name: Upload Release Asset
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: write
+    env:
+      PLUGIN: release-integration-template-go
+      REGISTRY_URL: ghcr.io
+      REGISTRY_ORG: digital-ai
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set release version to environment
+        run: |
+          TAG=${{ github.ref_name }}
+          echo "VERSION=${TAG#v}" >> $GITHUB_ENV
+
+      - name: Write environment values to project.properties
+        run: |
+          sed -i "/PLUGIN=/ s/=.*/=${{ env.PLUGIN }}/" project.properties
+          sed -i "/VERSION=/ s/=.*/=${{ env.VERSION }}/" project.properties
+          sed -i "/REGISTRY_URL=/ s/=.*/=${{ env.REGISTRY_URL }}/" project.properties
+          sed -i "/REGISTRY_ORG=/ s/=.*/=${{ env.REGISTRY_ORG }}/" project.properties
+
+      - name: Build zip file
+        run: sh build.sh
+
+      - name: Get latest release
+        id: get_release
+        uses: bruceadams/get-release@v1.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_release.outputs.upload_url }}
+          asset_path: ${{ format('build/{0}-{1}.zip', env.PLUGIN, env.VERSION) }}
+          asset_name: ${{ format('{0}-{1}.zip', env.PLUGIN, env.VERSION) }}
+          asset_content_type: application/zip
+
+      - name: Log in to Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY_URL }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ format('{0}/{1}/{2}:{3}', env.REGISTRY_URL, env.REGISTRY_ORG, env.PLUGIN, env.VERSION) }}
