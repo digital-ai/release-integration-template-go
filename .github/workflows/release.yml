@@ -31,7 +31,7 @@ jobs:
           sed -i "/REGISTRY_ORG=/ s/=.*/=${{ env.REGISTRY_ORG }}/" project.properties
 
       - name: Build zip file
-        run: sh build.sh
+        run: sh build.sh --zip
 
       - name: Get latest release
         id: get_release
