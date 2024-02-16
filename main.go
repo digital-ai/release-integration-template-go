@@ -10,10 +10,11 @@ import (
 	"github.com/digital-ai/release-integration-sdk-go/task/property"
 	"github.com/digital-ai/release-integration-template-go/my-integration/cmd"
 	"github.com/digital-ai/release-integration-template-go/task/server"
+	"os"
 )
 
-var PluginVersion = "development"
-var BuildDate = "now"
+var PluginVersion = os.Getenv("VERSION")
+var BuildDate = os.Getenv("BUILD_DATE")
 
 func prepareCommandFactory(input task.InputContext) (command.CommandFactory, error) {
 	var httpClient *http.HttpClient
