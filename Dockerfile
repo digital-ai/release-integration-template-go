@@ -27,6 +27,12 @@ FROM busybox:1.35.0-uclibc as busybox
 # Step 3
 FROM gcr.io/distroless/static-debian11:nonroot
 
+ARG VERSION
+ENV VERSION=$VERSION
+
+ARG BUILD_DATE
+ENV BUILD_DATE=$BUILD_DATE
+
 COPY --from=busybox /bin/sh /bin/sh
 COPY --from=busybox /bin/kill /bin/kill
 

@@ -58,8 +58,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: .
+          build-args: |
+            VERSION=${{ env.VERSION }}
+            BUILD_DATE=${{ github.event.created_at }}
           push: true
           tags: ${{ format('{0}/{1}/{2}:{3}', env.REGISTRY_URL, env.REGISTRY_ORG, env.PLUGIN, env.VERSION) }}
