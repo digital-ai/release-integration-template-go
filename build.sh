@@ -79,6 +79,9 @@ build_zip(){
 }
 
 build_image(){
+  # Set build date
+  BUILD_DATE=$(date +%Y-%m-%d)
+  
   # Build docker image and push to registry
   if docker build --build-arg VERSION="$VERSION" --build-arg BUILD_DATE="$BUILD_DATE" --tag "$REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION" .; then
     if docker image push "$REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION"; then
