@@ -1,4 +1,4 @@
-FROM xebialabsunsupported/release-runner:23.3.0-412.113
+FROM xebialabs/release-remote-runner:23.3.7
 
 USER root
 
