@@ -19,7 +19,7 @@ This section describes the quickest way to get a setup with Release to test cont
 
 You need to have the following installed in order to develop Go-based container tasks for Release using this project:
 
-* Go 1.19
+* Go 1.21
 * Git
 * Docker
 
@@ -71,8 +71,11 @@ sh build.sh
 ```commandline
 build.bat 
 ```
+The above command builds the zip, creates the container image, and then pushes the image to the configured registry.
 
-This builds the zip and the container image and pushes the image to the configured registry.
+`build.bat --zip` Builds the zip.
+
+`build.bat --image` Creates the container image, and then pushes the image to the configured registry.
 
 ### Install plugin into Release
 
