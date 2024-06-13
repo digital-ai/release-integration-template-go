@@ -1,6 +1,8 @@
-FROM xebialabs/release-remote-runner:24.1.2
+FROM xebialabs/release-runner:24.1.2
 
-RUN apk add --no-cache curl jq
+USER root
+
+RUN apt update && apt install -y curl jq
 
 COPY spin-remote-runner.sh /spin-remote-runner.sh
 RUN chmod +x /spin-remote-runner.sh
