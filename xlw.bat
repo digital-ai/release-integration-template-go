@@ -9,7 +9,8 @@ if "%OS%"=="Windows_NT" setlocal
 
 set PROG_DIR=%~dp0
 
-FOR /F "tokens=1,2 delims==" %%a IN (%PROG_DIR%\\.xebialabs\\wrapper.conf) DO (set %%a=%%~b)
+set "CONF_FILE=%PROG_DIR%\\.xebialabs\\wrapper.conf"
+FOR /F "tokens=1,2 delims==" %%a IN ('type "%CONF_FILE%"') DO (set "%%a=%%~b")
 
 set XL_WRAPPER_HOME=%LOCALAPPDATA%\\.xebialabs\\wrapper\\%CLI_VERSION%
 
