@@ -5,7 +5,7 @@ go 1.23.0
 toolchain go1.23.4
 
 require (
-	github.com/digital-ai/release-integration-sdk-go v0.2.66
+	github.com/digital-ai/release-integration-sdk-go v0.2.67
 	k8s.io/klog/v2 v2.130.1
 )
 
