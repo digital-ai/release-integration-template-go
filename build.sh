@@ -1,9 +1,11 @@
 #!/bin/bash
 # This script is used to build a zip and/or a docker image of a plugin.
-# The script takes in one optional argument:
+# The script takes in optional arguments:
 # --zip: build only the zip file
 # --image: build only the docker image
 # --upload: both the zip and image will be built and uploaded zip to the release server
+# --override-registry-url: override the Registry URL to which the image is uploaded, zip file will still contain original URL
+# --override-registry-org: override the Organization in which this image is uploaded, zip file will still contain original Organization
 # If no argument is passed, both the zip and image will be built
 
 read_properties(){
@@ -26,7 +28,6 @@ build_zip(){
   # Copy the resources directory contents to tmp
   cp -R resources/. tmp/
 
-  # Replace placeholders in type-definitions.xml/type-definitions.yaml & plugin-version.properties with values from project.properties
   if [ "$(uname)" = "Darwin" ]; then
     echo "Detected MAC OS X platform"
 
@@ -79,18 +80,29 @@ build_zip(){
 }
 
 build_image(){
+  SET_REGISTRY_URL="$REGISTRY_URL"
+  SET_REGISTRY_ORG="$REGISTRY_ORG"
+  if [ -n "$OVERRIDE_REGISTRY_URL" ]; then
+    echo "Overriding image URL for image registry upload: $OVERRIDE_REGISTRY_URL, zip file will still contain original URL: $REGISTRY_URL"
+    SET_REGISTRY_URL="$OVERRIDE_REGISTRY_URL"
+  fi
+  if [ -n "$OVERRIDE_REGISTRY_ORG" ]; then
+    echo "Overriding image Organization for image registry upload: $OVERRIDE_REGISTRY_ORG, zip file will still contain original URL: $REGISTRY_ORG"
+    SET_REGISTRY_ORG="$OVERRIDE_REGISTRY_ORG"
+  fi
   # Set build date
   BUILD_DATE=$(date +%Y-%m-%d)
-  
+
   # Build docker image and push to registry
-  if docker build --build-arg VERSION="$VERSION" --build-arg BUILD_DATE="$BUILD_DATE" --tag "$REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION" .; then
-    if docker image push "$REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION"; then
-      echo "Build and push completed: $REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION"
+  FULL_TAG="$SET_REGISTRY_URL/$SET_REGISTRY_ORG/$PLUGIN:$VERSION"
+  if docker build --build-arg VERSION="$VERSION" --build-arg BUILD_DATE="$BUILD_DATE" --tag "$FULL_TAG" .; then
+    if docker image push "$FULL_TAG"; then
+      echo "Build and push completed: $FULL_TAG"
     else
-      echo "Push failed for $REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION"
+      echo "Push failed for $FULL_TAG"
     fi
   else
-    echo "Build failed for $REGISTRY_URL/$REGISTRY_ORG/$PLUGIN:$VERSION"
+    echo "Build failed for $FULL_TAG"
   fi
 }
 
@@ -100,23 +112,86 @@ upload_zip(){
   ./xlw plugin release install --file build/$PLUGIN-$VERSION.zip --config .xebialabs/config.yaml
 }
 
-if [ "$1" = "--zip" ]; then
+parse_arguments() {
+  local state="none"
+  local current_flag=""
+  while [[ $# -gt 0 ]]; do
+    case $state in
+      none)
+        case $1 in
+          --zip)
+            BUILD_ZIP=true
+            ;;
+          --image)
+            BUILD_IMAGE=true
+            ;;
+          --upload)
+            UPLOAD_ZIP=true
+            ;;
+          --override-registry-url|--override-registry-org)
+            current_flag="$1"
+            state="read-value"
+            ;;
+          *)
+            echo "Unknown option: $1"
+            exit 1
+            ;;
+        esac
+        ;;
+      read-value)
+        if [[ $1 != --* && -n $1 ]]; then
+          case $current_flag in
+            --override-registry-url)
+              OVERRIDE_REGISTRY_URL="$1"
+              ;;
+            --override-registry-org)
+              OVERRIDE_REGISTRY_ORG="$1"
+              ;;
+          esac
+          state="none"
+        else
+          echo "Error: $current_flag requires a value."
+          exit 1
+        fi
+        ;;
+    esac
+    shift
+  done
+
+  # Final validation for missing value
+  if [[ $state == "read-value" ]]; then
+    echo "Error: $current_flag requires a value."
+    exit 1
+  fi
+}
+
+# Initialize variables
+BUILD_ZIP=false
+BUILD_IMAGE=false
+UPLOAD_ZIP=false
+REGISTRY_URL=""
+REGISTRY_ORG=""
+OVERRIDE_REGISTRY_URL=""
+OVERRIDE_REGISTRY_ORG=""
+
+# Call the function with all arguments
+read_properties
+parse_arguments "$@"
+
+
+if [ "$BUILD_ZIP" = true ]; then
   echo "Building zip..."
-  read_properties
   build_zip
-elif [ "$1" = "--image" ]; then
+elif [ "$BUILD_IMAGE" = true ]; then
   echo "Building image..."
-  read_properties
   build_image
-elif [ "$1" = "--upload" ]; then
+elif [ "$UPLOAD_ZIP" = true ]; then
   echo "Building zip, image and uploading zip..."
-  read_properties
   build_zip
   build_image
   upload_zip
 else
   echo "Building zip and image..."
-  read_properties
   build_zip
   build_image
 fi
