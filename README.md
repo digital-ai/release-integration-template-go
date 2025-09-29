@@ -63,7 +63,7 @@ Build will generate a zip and a docker image pushed to the registry defined in `
 **Unix / macOS**
 
 ```commandline
-sh build.sh 
+./build.sh 
 ```
 
 **Windows**
@@ -87,7 +87,7 @@ Update the Release server details in `.xebialabs/config.yaml`
 
 Run the command for Unix / macOS:
 ```commandline
-sh build.sh --upload 
+./build.sh --upload 
 ```
 
 Run the command for Windows:
