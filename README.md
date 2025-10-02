@@ -19,7 +19,7 @@ This section describes the quickest way to get a setup with Release to test cont
 
 You need to have the following installed in order to develop Go-based container tasks for Release using this project:
 
-* Go 1.21
+* Go 1.24
 * Git
 * Docker
 

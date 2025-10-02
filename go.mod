@@ -1,8 +1,6 @@
 module github.com/digital-ai/release-integration-template-go
 
-go 1.23.0
-
-toolchain go1.23.4
+go 1.24.0
 
 require (
 	github.com/digital-ai/release-integration-sdk-go v0.2.68
