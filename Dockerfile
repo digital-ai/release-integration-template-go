@@ -1,5 +1,5 @@
 # Step 1
-FROM golang:1.24 AS build
+FROM golang:1.26 AS build
 
 ENV CGO_ENABLED=0
 
