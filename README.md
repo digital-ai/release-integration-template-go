@@ -243,7 +243,7 @@ starting the stack again.
 
 - **[Digital.ai Release Go SDK](https://github.com/digital-ai/release-integration-sdk-go)** —
   The SDK powering this template's task runner, commands, and Release API clients.
-- **[Digital.ai Go SDK Documentation](https://github.com/digital-ai/release-integration-sdk-go/wiki)** —
+- **[Digital.ai Go SDK Documentation](https://docs.digital.ai/release/docs/how-to/overview-go-sdk)** —
   Guide to using the Go SDK and building custom tasks.
 - **[SDK Template Project for integration plugins](https://github.com/digital-ai/release-integration-template-go)** —
   A starting point for building custom integrations using Digital.ai Release and Go.
