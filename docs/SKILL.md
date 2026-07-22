@@ -39,7 +39,7 @@ A task's **type** maps to a Go **command** through the factory. The same type st
 
 | To… | Go to |
 |-----|-------|
-| Set up / configure a fresh clone | [README → Development](../README.md#development); name the plugin in `project.properties`; rename the `my-integration` package for your target. |
+| Set up / configure a fresh clone | [README → Development](../README.md#development); name the plugin in `project.properties`; replace the template README with the starter (`mv README-plugin.md README.md`); rename the `my-integration` package for your target. |
 | Add a new task | [PLUGIN_DEVELOPMENT.md → Add a new task](PLUGIN_DEVELOPMENT.md#add-a-new-task--step-by-step) (declare type → struct → factory → `FetchResult` → test → build). |
 | Add abort logic | [PLUGIN_DEVELOPMENT.md → Abort support](PLUGIN_DEVELOPMENT.md#abort-support). |
 | Understand the SDK task API or examples | [PLUGIN_DEVELOPMENT.md → Anatomy of a task](PLUGIN_DEVELOPMENT.md#anatomy-of-a-task) and [The example tasks explained](PLUGIN_DEVELOPMENT.md#the-example-tasks-explained). |

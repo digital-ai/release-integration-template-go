@@ -48,20 +48,24 @@ The [`release-integration-template-go`](https://github.com/digital-ai/release-in
 repository is a template. On its main page, click **Use this template → Create a new repository**.
 Then, before developing your integration, complete these steps:
 
-1. Rename the [`my-integration/`](my-integration/) folder (and its package) after your integration
+1. Replace this README with the generated-plugin starter:
+   `mv README-plugin.md README.md` (or `move /Y README-plugin.md README.md` on Windows).
+2. Rename the [`my-integration/`](my-integration/) folder (and its package) after your integration
    target. All task logic lives here.
    > **Note:** Go discourages `-` and `_` in package names — keep the package name short, single
    > word, and clear. The `-` in `my-integration` is intentional, for you to refactor.
-2. Set `PLUGIN`, `VERSION`, `REGISTRY_URL`, and `REGISTRY_ORG` in
+3. Set `PLUGIN`, `VERSION`, `REGISTRY_URL`, and `REGISTRY_ORG` in
    [`project.properties`](project.properties). Use the naming convention
    `[publisher]-release-[target]-integration` (e.g. `acme-release-example-integration`).
-3. Remove or adapt the example tasks in `my-integration/cmd/`,
+4. Remove or adapt the example tasks in `my-integration/cmd/`,
    [`resources/type-definitions.yaml`](resources/type-definitions.yaml), and `test/`.
-4. Update the plugin description and task details in this README.
-5. Run `go build ./...` and `go test ./...` before building.
+5. Update the plugin description and task details in the new README.
+6. Run `go build ./...` and `go test ./...` before building.
 
 The [`develop-release-integration-go`](docs/SKILL.md) skill guides you (or your AI agent)
-through these steps.
+through these steps, including the README swap. The generated README is the one users of
+your plugin will see — keep these template-specific instructions only while developing
+from the template.
 
 ## Quick start
 
@@ -109,6 +113,7 @@ After the upload completes, create a template with the **Container Examples: Hel
 | `docker-compose.yaml` | A local Dockerized Release server (+ runner + container registry) for testing. |
 | `dev-environment/`    | Build contexts and config used by `docker-compose.yaml`.                       |
 | `docs/`               | Contributor docs: `PLUGIN_DEVELOPMENT.md` (detailed guide), `AGENTS.md` (conventions/guardrails for AI agents), and `SKILL.md` (portable `develop-release-integration-go` skill that routes to the docs above). |
+| `README-plugin.md`    | Starter README for the generated plugin — copy over `README.md` after creating your repo (see the note above). |
 
 ## Prerequisites
 
@@ -252,4 +257,4 @@ starting the stack again.
 
 ## License
 
-See [License.md](License.md).
+See [LICENSE.md](LICENSE.md).
