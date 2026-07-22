@@ -1,189 +1,255 @@
-# _Template Project for Digital.ai Release Integrations_
+# Template Project for Digital.ai Release Integrations
 
-_This project serves as a template for developing a Go-based container plugin._
+![Go](https://img.shields.io/badge/go-1.26%2B-blue)
+[![release-integration-sdk-go](https://img.shields.io/badge/release--integration--sdk--go-GitHub-orange)](https://github.com/digital-ai/release-integration-sdk-go)
+![License: MIT](https://img.shields.io/badge/license-MIT-green)
 
-_See [How to create a new project](#how-to-create-a-new-project) below_
+This project serves as a template for developing a Go-based **container plugin**
+for Digital.ai Release. Each task is a Go command in [`my-integration/`](my-integration/)
+that is compiled into a binary, packaged into a Docker image, and run by Release as a
+container task.
 
----
+The task code is built on the **[`release-integration-sdk-go`](https://github.com/digital-ai/release-integration-sdk-go)** —
+commands are wired through its runner (`runner.Execute`) to read inputs, set outputs, and call
+the Release APIs. It is the project's main dependency and is pinned in [`go.mod`](go.mod).
 
-# Digital.ai Release integration to TARGET by PUBLISHER
+Building the project produces **two artifacts**:
 
-⮕ Insert description here ⬅
+- a **plugin zip** — the plugin metadata from `resources/`, installed into Release.
+- a **Docker image** — the compiled Go binary, pushed to a container registry and run by Release.
 
----
-## How to build and run
+> [!TIP]
+> **Writing your own tasks?** Start with the **[Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md)** —
+> it explains how a container plugin works, how to add a task, and how each bundled example was built.
 
-This section describes the quickest way to get a setup with Release to test containerized plugins using the SDK Development environment. For a production setup, please refer to the documentation. <!-- XXX insert link to documentation -->
+> [!IMPORTANT]
+> **Using this as a template?** This README documents the *template itself*. After you create
+> your own repo from it, follow [After creating your repository](#after-creating-your-repository)
+> to personalize the clone.
 
-### Prerequisites
+## Contents
 
-You need to have the following installed in order to develop Go-based container tasks for Release using this project:
+- [After creating your repository](#after-creating-your-repository)
+- [Quick start](#quick-start)
+- [Project layout](#project-layout)
+- [Prerequisites](#prerequisites)
+- [Development](#development)
+- [Run Release locally](#run-release-locally)
+- [Build & publish](#build--publish)
+- [Install the plugin into Release](#install-the-plugin-into-release)
+- [First successful run](#first-successful-run)
+- [Clean up the local environment](#clean-up-the-local-environment)
+- [Related resources](#related-resources)
+- [License](#license)
 
-* Go 1.26
-* Git
-* Docker
+## After creating your repository
 
-### Start Release and Release Remote Runner
+The [`release-integration-template-go`](https://github.com/digital-ai/release-integration-template-go)
+repository is a template. On its main page, click **Use this template → Create a new repository**.
+Then, before developing your integration, complete these steps:
 
-We will run Release and Release Remote Runner within a local Docker environment. In the development setup, the Release will trigger execution of containerized task on local Docker run Remote Runner.
+1. Rename the [`my-integration/`](my-integration/) folder (and its package) after your integration
+   target. All task logic lives here.
+   > **Note:** Go discourages `-` and `_` in package names — keep the package name short, single
+   > word, and clear. The `-` in `my-integration` is intentional, for you to refactor.
+2. Set `PLUGIN`, `VERSION`, `REGISTRY_URL`, and `REGISTRY_ORG` in
+   [`project.properties`](project.properties). Use the naming convention
+   `[publisher]-release-[target]-integration` (e.g. `acme-release-example-integration`).
+3. Remove or adapt the example tasks in `my-integration/cmd/`,
+   [`resources/type-definitions.yaml`](resources/type-definitions.yaml), and `test/`.
+4. Update the plugin description and task details in this README.
+5. Run `go build ./...` and `go test ./...` before building.
 
-Start the Release and Remote Runner environment with the following command
+The [`develop-release-integration-go`](docs/SKILL.md) skill guides you (or your AI agent)
+through these steps.
 
-```commandline
-cd dev-environment
+## Quick start
+
+From the repository root:
+
+```sh
+go build ./...                       # compile everything
+docker compose up -d --build         # start Release, the runner, and the local registry
+```
+
+Wait for the Release container log to show `Digital.ai Release has started.` Before
+building, add `127.0.0.1 container-registry` to your hosts file — this requires
+administrator/`sudo` rights (see [Run Release locally](#run-release-locally)). Then
+build and install the plugin. The `--upload` step reads your Release server details
+from [`.xebialabs/config.yaml`](.xebialabs/config.yaml) (defaults point at the local
+server):
+
+```sh
+# macOS / Linux
+./build.sh --upload
+```
+
+```powershell
+# Windows (PowerShell or Command Prompt)
+.\build.bat --upload
+```
+
+The default local Release server is available at <http://localhost:5516>.
+After the upload completes, create a template with the **Container Examples: Hello (Go)** task
+(`goContainerExamples.Hello`) and run it. Each step is detailed below.
+
+## Project layout
+
+| Path                  | Purpose                                                                       |
+|-----------------------|-------------------------------------------------------------------------------|
+| `main.go`             | Entry point — wires the SDK runner and command factory. **Ships inside the Docker image.** |
+| `my-integration/`     | Task implementations (`cmd/` structs, factory, executors, examples). **This code ships inside the Docker image.** See the [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md). |
+| `task/`               | Shared task helpers used by the integration (e.g. server connection deserialization). |
+| `test/`               | GoConvey integration tests with `testdata/` and `fixtures/`. Not shipped in the image. |
+| `resources/`          | Plugin metadata (`type-definitions.yaml`, icons) packaged into the plugin zip. |
+| `go.mod` / `go.sum`   | Go module definition and dependency checksums. **Source of truth for the container.** |
+| `Dockerfile`          | Builds the container image that runs the tasks.                               |
+| `build.sh` / `build.bat` | Builds the plugin zip and the Docker image, and uploads them to Release.    |
+| `project.properties`  | Plugin name, version, and registry coordinates used by the build scripts.     |
+| `docker-compose.yaml` | A local Dockerized Release server (+ runner + container registry) for testing. |
+| `dev-environment/`    | Build contexts and config used by `docker-compose.yaml`.                       |
+| `docs/`               | Contributor docs: `PLUGIN_DEVELOPMENT.md` (detailed guide), `AGENTS.md` (conventions/guardrails for AI agents), and `SKILL.md` (portable `develop-release-integration-go` skill that routes to the docs above). |
+
+## Prerequisites
+
+- [Go 1.26+](https://go.dev/)
+- [Docker](https://www.docker.com/) — to build and run the container image
+- [Git](https://git-scm.com/)
+
+## Development
+
+Write and test tasks with the standard Go toolchain. The container image itself is built from the
+module (`go build`) by the [`Dockerfile`](Dockerfile).
+
+### Build and test
+
+```sh
+go build ./...            # compile everything
+go test ./...             # run all tests
+go test -v ./test/...     # run the integration tests, verbose
+gofmt -w <files>          # format edited Go files
+```
+
+### Add a dependency
+
+Dependencies are managed with Go modules. Add one and update `go.mod` / `go.sum`:
+
+```sh
+go get <module>
+go mod tidy               # when directly relevant
+```
+
+The SDK, [`release-integration-sdk-go`](https://github.com/digital-ai/release-integration-sdk-go),
+is the primary dependency.
+
+## Run Release locally
+
+Run a local Release server, its remote runner, and a container registry, using Docker.
+
+```sh
 docker compose up -d --build
 ```
 
->**Note:** Before running you can change default password fore `remote-runner` user in `dev-environment/digitalai-release-setup/secrets.xlvals` if needed - be sure to set a password with special char, numeric value, upper case letter and long enough, or secure enough to be up to security compliancy in Release.
-
 ### Configure your `hosts` file
 
-The Release server needs to be able to find the container images of the integration you are creating. In order to do so the development setup has its own registry running inside Docker. Add the address of the registry to your local machine's `hosts` file.
+Release must be able to reach the local container registry by name. Add this entry:
 
-**Unix / macOS**
-
-Add the following entry to `/etc/hosts` (sudo privileges is required to edit):
-
-    127.0.0.1 container-registry
-
-**Windows**
-
-Add the following entry to `C:\Windows\System32\drivers\etc\hosts` (Run as administrator permission is required to edit):
-
-    127.0.0.1 container-registry
-
-
-### Build & publish the plugin
-
-Build will generate a zip and a docker image pushed to the registry defined in `project.properties`
-
-1. Set properties in `project.properties`
-2. Run build script to build the plugin zip and publish the image to registry:
-
-**Unix / macOS**
-
-```commandline
-./build.sh 
-```
-
-**Windows**
-
-```commandline
-build.bat 
-```
-The above command builds the zip, creates the container image, and then pushes the image to the configured registry.
-
-`build.bat --zip` Builds the zip.
-
-`build.bat --image` Creates the container image, and then pushes the image to the configured registry.
-
-### Install plugin into Release
-
-There are two ways to install the plugin into Release.
-
-**Install plugin via commandline**
-
-Update the Release server details in `.xebialabs/config.yaml`
-
-Run the command for Unix / macOS:
-```commandline
-./build.sh --upload 
-```
-
-Run the command for Windows:
-```commandline
-build.bat --upload 
-```
-The above command builds the zip and image and uploads the zip to the release server.
-
-**Install plugin via Release server UI**
-
-In the Release UI, use the Plugin Manager interface to upload the zip from `build`.
-The zip takes the name of the project, for example `release-integration-template-go-0.0.1.zip`.
-
-Then:
-* Refresh the UI by pressing Reload in the browser.
-
-### 5. Test it!
-
-Create a template with the task **Go Container Example: Hello** and run it!
-
-### 6. Clean up
-
-Stop the development environment with the following command:
-
-    docker compose down
-
----
-
-## How to create a new project
-
-The  [release-integration-template-go](https://github.com/digital-ai/release-integration-template-go) repository is a template project.
-
-On the main page of this repository, click **Use this template** button, and select **Create new repository**. This will create a duplicate of this project to start developing your own container-based integration.
-
-**Naming conventions**
-
-- `my-integration` folder (as well as the package `my_integration`) should be renamed after the integration target name. 
-All task logic should be implemented inside this folder.\
-(**Note:** *Go doesn't encourage usage of `-` and `_` in package names, try to keep package name short, single word, but still clear. In this example `-` was used on intention with intention for you to refactor it.*)
-
-
-Use the following naming convention for developing Digital.ai Release integration plugins:
-
-    [publisher]-release-[target]-integration
-
-Where publisher would be the name of your company.
-
-For example:
-
-    acme-release-example-integration
-
-### Repository configuration
-
-In the new project, update `project.properties` with the name of the integration plugin
-
-```commandline
-cd acme-release-example-integration
-```
-
-Change the following line in `project.properties`:
+- **macOS / Linux** — `/etc/hosts` (requires `sudo`)
+- **Windows** — `C:\Windows\System32\drivers\etc\hosts` (run as administrator)
 
 ```
-PLUGIN=acme-release-example-integration
-...
+127.0.0.1 container-registry
 ```
-### Add a new task
 
-1. Add task type to `type-definitions.yaml`.
-2. Add task struct with input parameters to `cmd/commands.go`.
-3. Add task type to constants and command factory in `cmd/factory.go`.
-4. Add `FetchResult()` implementation of command in `cmd/executors.go` and add task logic.
+## Build & publish
 
-**_NOTE:_** Although task logic is inside `FetchResult()` method, it is a good practice to create a new file for each new task (See examples).
+The build scripts read `project.properties`, build the plugin zip from
+`resources/`, build the Docker image from the `Dockerfile`, and push the image to
+the configured registry.
 
-### Add abort logic for a task
+The `--image`, default, and `--upload` workflows require Docker to be running and
+the registry in `REGISTRY_URL` to be reachable. For the local Docker Compose
+environment, start the stack first and add `127.0.0.1 container-registry` to your
+hosts file as described in [Run Release locally](#run-release-locally). For a remote
+registry, make sure Docker is authenticated and that `REGISTRY_URL` and
+`REGISTRY_ORG` in [`project.properties`](project.properties) are correct.
 
-View examples at [Abort Example](my-integration/cmd/example)
+| Command                | Result                                                        |
+|------------------------|---------------------------------------------------------------|
+| `./build.sh`           | Build the zip **and** the image, and push the image.          |
+| `./build.sh --zip`     | Build only the plugin zip.                                    |
+| `./build.sh --image`   | Build only the Docker image and push it.                      |
+| `./build.sh --upload`  | Build the zip and image, push the image, and upload the zip to Release. |
 
-1. Define abort command for a task in `cmd/factory.go`. Use following syntax `command.AbortCommand(NAME_OF_EXISTING_COMAND): func...` (See example for `hello`)
-2. In `cmd/commands.go`, define a struct that will hold the necessary data for abort execution.
-3. In `cmd/executors.go`, define a method on the newly created struct which implements `FetchResults`
+On Windows, use `build.bat` with the same arguments (works in both PowerShell and
+Command Prompt), for example:
 
-**_NOTE:_** Make sure to include context.Context in your methods as it is now required because of changes made to support abort functionality.
+```powershell
+.\build.bat --upload
+```
 
+## Install the plugin into Release
 
+**Option A — command line**
 
+Set your Release server details in [`.xebialabs/config.yaml`](.xebialabs/config.yaml)
+(the same file used by the [Quick start](#quick-start) `--upload` step), then make sure
+the Release server is running and use the command for your platform:
 
-### Integration tests
+```sh
+# macOS / Linux
+./build.sh --upload
+```
 
-Integration tests execution is implemented in `test/integration_test.go` using Convey. 
+```powershell
+# Windows
+.\build.bat --upload
+```
 
-#### Add a new integration test:
-1. Create a new folder inside `test/testdata`.
-2. Add `input.json` (provided input) and `expected.json` (expected output) files inside the new folder.
-3. Add the folder name to `testsLabels` variable in `test/integration_test.go`.
+**Option B — Release UI**
 
-#### Add a new mock HTTP response:
-1. Add JSON file with corresponding response to `test/fixtures`.
-2. Add `test.MockResult{}` to `commandRunner` in `test/integration_test.go`.
+In the Release **Plugin Manager**, upload the zip from `build/`
+(named `<PLUGIN>-<VERSION>.zip`, e.g. `release-integration-template-go-0.0.1.zip`
+with the current [`project.properties`](project.properties)),
+then reload the browser.
+
+## First successful run
+
+The [Quick start](#quick-start) covers the happy path end to end. Once the plugin is
+installed, verify the workflow in the Release UI:
+
+1. Open <http://localhost:5516>, create a template, and add
+   **Container Examples: Hello (Go)** (`goContainerExamples.Hello`).
+2. Run the release and verify the task produces its greeting output.
+
+If a step fails, see [Run Release locally](#run-release-locally),
+[Build & publish](#build--publish), and [Install the plugin into Release](#install-the-plugin-into-release)
+for the full setup and troubleshooting details.
+
+## Clean up the local environment
+
+When you finish testing, stop the local Release server, runner, and registry:
+
+```sh
+docker compose down
+```
+
+This stops the containers but preserves the local registry/server data mounted under
+`dev-environment/`. To reset the development environment and remove that test state,
+run `docker compose down` and remove the generated contents under that directory before
+starting the stack again.
+
+## Related resources
+
+- **[Digital.ai Release Go SDK](https://github.com/digital-ai/release-integration-sdk-go)** —
+  The SDK powering this template's task runner, commands, and Release API clients.
+- **[Digital.ai Go SDK Documentation](https://github.com/digital-ai/release-integration-sdk-go/wiki)** —
+  Guide to using the Go SDK and building custom tasks.
+- **[SDK Template Project for integration plugins](https://github.com/digital-ai/release-integration-template-go)** —
+  A starting point for building custom integrations using Digital.ai Release and Go.
+- **[Digital.ai Release documentation](https://docs.digital.ai/)** —
+  Product documentation for Digital.ai Release.
+
+## License
+
+See [License.md](License.md).
