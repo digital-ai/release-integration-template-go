@@ -176,8 +176,9 @@ Every command implements **`FetchResult(ctx context.Context) (*task.Result, erro
 | Element | Purpose |
 |---------|---------|
 | Struct fields with `json:"..."` tags | The task's input properties, deserialized by the SDK. |
-| `task.NewResult()` | Builds the result. Chain setters like `.String(name, value)` for output properties, and comment/status helpers. |
-| `return result, nil` | Success — the result's output properties and comments go back to Release. |
+| `task.NewResult()` | Builds the result. Chain setters like `.String(name, value)` (also `.Int`, `.Bool`, `.Date`, `.LookupResultElements`) to add output properties. |
+| `task.Comment(text)` | Adds a comment shown on the task in the Release UI. A package-level helper — call it directly, not chained on the result (see the `Hello` example). |
+| `return result, nil` | Success — the result's output properties go back to Release. |
 | `return nil, err` | **Failure** — return a non-nil error to fail the task; the message is shown to the user. Wrap with context. |
 | `ctx context.Context` | Required on every command; carries cancellation used for [abort](#abort-support). |
 
