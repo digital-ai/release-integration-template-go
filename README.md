@@ -105,7 +105,7 @@ After the upload completes, create a template with the **Container Examples: Hel
 | `my-integration/`     | Task implementations (`cmd/` structs, factory, executors, examples). **This code ships inside the Docker image.** See the [Plugin Development Guide](docs/PLUGIN_DEVELOPMENT.md). |
 | `task/`               | Shared task helpers used by the integration (e.g. server connection deserialization). |
 | `test/`               | GoConvey integration tests with `testdata/` and `fixtures/`. Not shipped in the image. |
-| `resources/`          | Plugin metadata (`type-definitions.yaml`, icons) packaged into the plugin zip. |
+| `resources/`          | Plugin metadata packaged into the plugin zip: `type-definitions.yaml` (task types), the plugin icon (`test.png`), and `plugin-version.properties` (name/version, filled from `project.properties` at build). |
 | `go.mod` / `go.sum`   | Go module definition and dependency checksums. **Source of truth for the container.** |
 | `Dockerfile`          | Builds the container image that runs the tasks.                               |
 | `build.sh` / `build.bat` | Builds the plugin zip and the Docker image, and uploads them to Release.    |
