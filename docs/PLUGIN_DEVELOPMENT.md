@@ -427,7 +427,7 @@ docker compose up -d --build
 | `Could not find a type definition associated with type [...]` | A type name or an `extends:` reference in `type-definitions.yaml` is inconsistent. Make the names match; reset if needed. |
 | Run-time error `unknown command type [...]` | The [naming contract](#the-naming-contract-type--command) is broken: the type in `type-definitions.yaml` has no matching key in `commandHatchery`. |
 | A task's input field is empty at run time | The struct's `json` tag doesn't match the `input-properties` name in the YAML. |
-| Your task is missing from the **Add task** menu, or its properties don't show | UI cache. Hard-refresh the browser (Ctrl/Cmd+Shift+R). No server restart needed. |
+| Your task is missing from the **Add task** menu, or its properties don't show | First confirm the plugin uploaded: **Manage plugins** → **Installed plugins** (<http://localhost:5516/#/pluginManager>). If it is listed, this is UI cache — hard-refresh the browser (Ctrl/Cmd+Shift+R). No server restart needed. |
 | Image push fails | `container-registry` is not in your hosts file, or the registry container is down. Check `curl http://container-registry:5050/v2/_catalog`. |
 | Apple Silicon: `qemu: uncaught target signal 11` | Enable **Rosetta** in Docker Desktop → *Features in development*. |
 | Compose fails to start | Port conflict on `5516`, `5050`, or `8086`. Free the port or remap it. |
